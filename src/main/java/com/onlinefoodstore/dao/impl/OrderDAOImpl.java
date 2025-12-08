@@ -1,4 +1,4 @@
 package com.onlinefoodstore.dao.impl;
 
-public interface ICustomerDAO {
+public class OrderDAOImpl {
 }
