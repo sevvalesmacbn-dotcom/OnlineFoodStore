@@ -42,5 +42,5 @@ public class Food {
 
     public int getStock(){return stock;}
     public void setStock(int stock){this.stock=stock;}
-    
+
 }
