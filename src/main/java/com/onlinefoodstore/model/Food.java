@@ -44,5 +44,6 @@ public class Food {
     public void setStock(int stock){this.stock=stock;}
 
     public void add(Food food) {
+
     }
 }
