@@ -1,11 +1,7 @@
 package com.onlinefoodstore.dao.impl;
 
 import com.onlinefoodstore.dao.ICustomerDAO;
-import com.onlinefoodstore.dao.IOrderDAO;
-import com.onlinefoodstore.dao.impl.OrderDAOImpl;
-import com.onlinefoodstore.dao.impl.FoodDAOImpl;
-import com.onlinefoodstore.model.Order;
-import com.onlinefoodstore.model.OrderItem;
+
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;;

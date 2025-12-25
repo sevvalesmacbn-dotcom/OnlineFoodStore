@@ -1,7 +1,5 @@
 package com.onlinefoodstore.dao.impl;
 
-import com.onlinefoodstore.dao.IOrderItemDAO;
-import com.onlinefoodstore.model.OrderItem;
 import com.onlinefoodstore.model.Food;
 import java.sql.*;
 import java.util.ArrayList;
