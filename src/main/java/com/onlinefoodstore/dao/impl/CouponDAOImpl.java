@@ -14,7 +14,7 @@ public class CouponDAOImpl implements ICouponDAO{
             if(rs.next()){
                 Coupon coupon= new Coupon();
                 coupon.setId(rs.getInt("id"));
-                coupon.setCode(rs.getNString("code"));
+                coupon.setCode(rs.getString("code"));
                 coupon.setDiscountAmount(rs.getDouble("discount_amount"));
                 return coupon;
             }

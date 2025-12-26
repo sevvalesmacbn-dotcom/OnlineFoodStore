@@ -14,10 +14,10 @@ public class UserDAOImpl implements IUserDAO {
             if(rs.next()){
                 User user= new User();
                 user.setId(rs.getInt("id"));
-                user.setName(rs.getNString("name"));
-                user.setUsername(rs.getNString("username"));
+                user.setName(rs.getString("name"));
+                user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getInt("int"));
-                user.setRole(rs.getNString("role"));
+                user.setRole(rs.getString("role"));
                 return user;
             }
 
@@ -36,10 +36,10 @@ public class UserDAOImpl implements IUserDAO {
             if(rs.next()){
                 User user= new User();
                 user.setId(rs.getInt("id"));
-                user.setName(rs.getNString("name"));
-                user.setUsername(rs.getNString("username"));
+                user.setName(rs.getString("name"));
+                user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getInt("password"));
-                user.setRole(rs.getNString("role"));
+                user.setRole(rs.getString("role"));
                 return user;
             }
         }catch (SQLException e){

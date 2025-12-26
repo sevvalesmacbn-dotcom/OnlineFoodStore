@@ -19,11 +19,11 @@ public class FoodDAOImpl implements IFoodDAO {
             while(rs.next()){
                 Food food = new Food();
                 food.setId(rs.getInt("id"));
-                food.setCategory(rs.getNString("category"));
-                food.setName(rs.getNString("name"));
+                food.setCategory(rs.getString("category"));
+                food.setName(rs.getString("name"));
                 food.setPrice(rs.getDouble("price"));
                 food.setStock(rs.getInt("stock"));
-                food.setRestaurant(rs.getNString("restaurant"));
+                food.setRestaurant(rs.getString("restaurant"));
                 food.add(food);
             }
         } catch (SQLException e) {
@@ -41,11 +41,11 @@ public class FoodDAOImpl implements IFoodDAO {
             if(rs.next()){
                 Food food=new Food();
                 food.setId(rs.getInt("id"));
-                food.setRestaurant(rs.getNString("restaurant"));
+                food.setRestaurant(rs.getString("restaurant"));
                 food.setStock(rs.getInt("stock"));
-                food.setName(rs.getNString("name"));
+                food.setName(rs.getString("name"));
                 food.setPrice(rs.getDouble("price"));
-                food.setCategory(rs.getNString("category"));
+                food.setCategory(rs.getString("category"));
                 return food;
             }
         } catch (SQLException e) {
