@@ -37,11 +37,26 @@ public class FoodStoreConsoleApp {
     private static Customer currentCustomer;
     private static List<Food>selectedFoods = new ArrayList<>();
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println("╔════════════════════════════════════════╗");
         System.out.println("║      Online Food Store Console App     ║");
         System.out.println("╚════════════════════════════════════════╝");
         // veritabanı baglantısı kurma
-
+        connection = DBConnection.getConnection();
+        if (connection == null) {
+            System.out.println("❌ Veritabanı bağlantısı kurulamadı. Program sonlandırılıyor...");
+            return;
+        }
+        // DAOları baslatma
+        userDAO = new UserDAOImpl(connection);
+        foodDAO = new FoodDAOImpl(connection);
+        couponDAO = new CouponDAOImpl(connection);
+        customerDAO = new CustomerDAOImpl(connection);
+        //login islemi
+        if (!loginUser()) {
+            System.out.println("❌ Giriş başarısız.Program sonlandırılıyor...");
+            closeConnection();
+            return;
+        }
     }
 }
