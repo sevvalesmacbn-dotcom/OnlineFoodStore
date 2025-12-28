@@ -122,5 +122,73 @@ public class FoodStoreConsoleApp {
         }
         return false;
     }
+        //Yemekleri liste ve kullanıcının secim yapmasını sagla
+    private static void listAndSelectFoods(){
+        System.out.println("\n╔════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                          YEMEK LİSTESİ                                     ║");
+        System.out.println("╚════════════════════════════════════════════════════════════════════════════╝");
 
+        List<Food> foods = foodDAO.getAllFoods();
+
+        if (foods.isEmpty()){
+            System.out.println("❌ Sistemde yemek bulunmamaktadır.");
+            return;
+        }
+        //Yemekleri listele
+        System.out.println(String.format("%-5d %-30s %-20s %-15s %-10s %-10s",
+                "ID","Ad","Restoran","Kategori","Fiyat","Stok"));
+        System.out.println("─".repeat(95));
+        for (Food food : foods){
+            System.out.println(String.format("%-5d %-30s %-20s %-15s %-10.2f %-10d",
+                    food.getId(),
+                    food.getName().length()>30 ? food.getName().substring(0, 27) +"...": food.getName(),
+                    food.getRestaurant().length()>20 ? food.getRestaurant().substring(0, 17) +"...": food.getRestaurant(),
+                    food.getCategory(),
+                    food.getPrice(),
+                    food.getStock()));
+        }
+        //Yemek seçimi
+        System.out.println("\n───────────────────────────────────────────────────────────────────────────");
+        System.out.print("Sepete eklemek için yemek ID'si girin (0 = Ana menüye dön): ");
+        int foodId = getIntInput();
+
+        if (foodId == 0){
+            return;
+        }
+        Food selectedFood = foodDAO.getFoodById(foodId);
+        if (selectedFood == null){
+            System.out.println("❌ Girilen ID'ye sahip yemek bulunamadı!");
+            return;
+        }
+        if (selectedFood.getStock()<=0){
+            System.out.println("❌ Bu yemek stokta yok!");
+            return;
+        }
+        selectedFoods.add(selectedFood);
+        System.out.println("✅ '"+selectedFood.getName()+"' sepete eklendi!");
+    }
+    // sepetteki yemekleri görüntüle
+    private static void viewCart(){
+        System.out.println("\n╔════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                          SEPETİNİZ                                         ║");
+        System.out.println("╚════════════════════════════════════════════════════════════════════════════╝");
+        if (selectedFoods.isEmpty()){
+            System.out.println("❌ Sepetiniz boş!");
+            return;
+        }
+        double total = 0;
+        System.out.println(String.format("%-5s %-30s %-20s %-10s", "Sıra", "Yemek", "Restoran", "Fiyat"));
+        System.out.println("─".repeat(70));
+        for(int i=0;i<selectedFoods.size();i++){
+            Food food =selectedFoods.get(i);
+            System.out.println(String.format("%-5d %-30s %-20s %-10.2f TL",
+                    (i+1),
+                    food.getName().length()>30 ? food.getName().substring(0, 27)+"..." : food.getName(),
+                    food.getRestaurant().length()>20 ? food.getRestaurant().substring(0, 17)+"..." : food.getRestaurant(),
+                    food.getPrice()));
+            total += food.getPrice();
+        }
+        System.out.println("─".repeat(70));
+        System.out.println(String.format("%56s %.2f TL", "TOPLAM:", total));
+    }
 }
