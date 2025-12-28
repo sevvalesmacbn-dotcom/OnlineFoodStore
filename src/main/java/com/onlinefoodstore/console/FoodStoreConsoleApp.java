@@ -37,13 +37,13 @@ public class FoodStoreConsoleApp {
     private static Customer currentCustomer;
     private static List<Food>selectedFoods = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         System.out.println("╔════════════════════════════════════════╗");
         System.out.println("║      Online Food Store Console App     ║");
         System.out.println("╚════════════════════════════════════════╝");
         // veritabanı baglantısı kurma
         connection = DBConnection.getConnection();
-        if (connection == null) {
+        if (connection == null){
             System.out.println("❌ Veritabanı bağlantısı kurulamadı. Program sonlandırılıyor...");
             return;
         }
@@ -53,10 +53,74 @@ public class FoodStoreConsoleApp {
         couponDAO = new CouponDAOImpl(connection);
         customerDAO = new CustomerDAOImpl(connection);
         //login islemi
-        if (!loginUser()) {
+        if (!loginUser()){
             System.out.println("❌ Giriş başarısız.Program sonlandırılıyor...");
             closeConnection();
             return;
         }
+        //ANA MENÜ
+        boolean running = true;
+        while (running){
+            System.out.println("\n╔════════════════════════════════════════╗");
+            System.out.println("║           ANA MENÜ                     ║");
+            System.out.println("╠════════════════════════════════════════╣");
+            System.out.println("║ 1. Yemekleri Listele                   ║");
+            System.out.println("║ 2. Sepeti Görüntüle                    ║");
+            System.out.println("║ 3. Ödeme Yap                           ║");
+            System.out.println("║ 4. Çıkış                               ║");
+            System.out.println("╚════════════════════════════════════════╝");
+            System.out.print("Seciminiz: ");
+            int choice = getIntInput();
+            switch (choice){
+                case 1:
+                    listAndSelectFoods();
+                    break;
+                case 2:
+                    viewCart();
+                    break;
+                case 3:
+                    checkout();
+                    break;
+                case 4:
+                    running = false;
+                    System.out.println("\uD83D\uDC4B\n Çıkış yapılıyor. Güle güle!");
+                    break;
+                default:
+                    System.out.println("❌ Geçersiz seçim! Lütfen 1-4 arası bir değer girin.");
+            }
+        }
+        closeConnection();
     }
+    //Kullanıcı login islemii
+    private static boolean loginUser() {
+        System.out.println("\n═══════════════════════════════════════");
+        System.out.println("         KULLANICI GİRİŞİ");
+        System.out.println("═══════════════════════════════════════");
+        for(int attempt =0;attempt <3; attempt++){
+            System.out.print("Kullanıcı Adı: ");
+            String username = scanner.nextLine().trim();
+
+            System.out.println("Şifre: ");
+            int password = getIntInput();
+            // veritabanından kullanıcıyı getir
+            User user = userDAO.getByUsername(username);
+            if (user != null && user.getPassword() == password){
+                currentUser = user;
+                // customer bilgilerini cek (varsa)
+                currentCustomer = customerDAO.getCustomerByUsername(username);
+                if (currentCustomer != null){
+                    System.out.println("\n✅ Giriş başarılı! Hoş geldiniz, "+ currentCustomer.getName());
+                    System.out.println("\uD83D\uDCF1\n Telefon: "+(currentCustomer.getPhone() != null ? currentCustomer.getPhone() : "Bilgi yok"));
+                    System.out.println("\uD83D\uDCCD\n Adres: "+(currentCustomer.getAddress() != null ? currentCustomer.getAddress(): "Bilgi yok"));
+                }else {
+                    System.out.println("\n✅ Giriş başarılı! Hoş geldiniz, "+user.getName());
+                }
+                return true;
+            }else {
+                System.out.println("❌ Kullanıcı adı veya şifre hatalı! Kalan deneme: "+(2-attempt));
+            }
+        }
+        return false;
+    }
+
 }
