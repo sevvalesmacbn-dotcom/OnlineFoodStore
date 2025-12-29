@@ -191,4 +191,79 @@ public class FoodStoreConsoleApp {
         System.out.println("─".repeat(70));
         System.out.println(String.format("%56s %.2f TL", "TOPLAM:", total));
     }
+    //ödeme islemi
+    private static void checkout(){
+        if (selectedFoods.isEmpty()){
+            System.out.println("❌ Sepetiniz boş! Önce yemek seçin.");
+            return;
+        }
+        // Toplam tutarı hesapla
+        double originalTotal = 0;
+        for (Food food : selectedFoods){
+            originalTotal += food.getPrice();
+        }
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║         ÖDEME İŞLEMİ                   ║");
+        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("Toplam Tutar: "+ String.format("%.2f TL",originalTotal));
+
+        //Kupon kodu sorgusu
+        System.out.println("\n───────────────────────────────────────");
+        System.out.println("İndirim kuponu kullanmak ister misiniz? (E/H): ");
+        String useCoupon = scanner.nextLine().trim().toUpperCase();
+
+        double discountedTotal = originalTotal;
+        String appliedCouponCode = null;
+
+        if (useCoupon.equals("E")) {
+            System.out.print("Kupon kodunu girin: ");
+            String couponCode = scanner.nextLine().trim();
+
+            Coupon coupon = couponDAO.getCouponByCode(couponCode);
+
+            if (coupon != null) {
+                discountedTotal = originalTotal - coupon.getDiscountAmount();
+                if (discountedTotal < 0) {
+                    discountedTotal = 0;
+                }
+                appliedCouponCode = coupon.getCode();
+                System.out.println("✅ Kupon uygulandı! İndirim: " + String.format("%.2f TL", coupon.getDiscountAmount()));
+                System.out.println("Yeni Toplam: " + String.format("%.2f TL", discountedTotal));
+            } else {
+                System.out.println("❌ Geçersiz kupon kodu!");
+            }
+        }
+        // Ödeme yöntemi secimi
+        System.out.println("\n───────────────────────────────────────");
+        System.out.println("Ödeme Yöntemi Seçiniz:");
+        System.out.println("1. Kredi Kartı");
+        System.out.println("2. Kapıda Ödeme");
+        System.out.println("───────────────────────────────────────");
+        System.out.println("Seçiminiz: ");
+
+        int paymentChoice = getIntInput();
+
+        IPaymentMethod paymentMethod = null;
+
+        switch (paymentChoice){
+            case 1:
+                paymentMethod = new CreditCardPayment();
+                break;
+            case 2:
+                paymentMethod = new CashOnDeliveryPayment();
+                break;
+            default:
+                System.out.println("❌ Geçersiz ödeme yöntemi!");
+                return;
+        }
+        // ödemeyi işle
+        System.out.println("\n💳 Ödeme işleniyor...");
+        paymentMethod.pay(discountedTotal);
+        // Stok güncelleme
+        for (Food food : selectedFoods){
+            foodDAO.decreaseStock(food.getId(), 1);
+        }
+        // sipariş özeti
+
+    }
 }
