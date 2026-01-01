@@ -24,7 +24,7 @@ public class FoodDAOImpl implements IFoodDAO {
                 food.setPrice(rs.getDouble("price"));
                 food.setStock(rs.getInt("stock"));
                 food.setRestaurant(rs.getString("restaurant"));
-                food.add(food);
+                foods.add(food);
             }
         } catch (SQLException e) {
            e.printStackTrace();
@@ -106,6 +106,7 @@ public class FoodDAOImpl implements IFoodDAO {
             ps.setInt(1, quantity);
             ps.setInt(2, foodId);
             ps.setInt(3, quantity);
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
