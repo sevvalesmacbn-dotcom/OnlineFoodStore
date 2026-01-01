@@ -85,6 +85,7 @@ public class CustomerDAOImpl implements ICustomerDAO {
         String sql= """
                 SELECT
                     u.id,
+                    u.name,
                     u.username,
                     u.password,
                     u.role,
