@@ -100,7 +100,7 @@ public class FoodStoreConsoleApp {
             System.out.print("Kullanıcı Adı: ");
             String username = scanner.nextLine().trim();
 
-            System.out.println("Şifre: ");
+            System.out.print("Şifre: ");
             int password = getIntInput();
             // veritabanından kullanıcıyı getir
             User user = userDAO.getByUsername(username);
@@ -135,7 +135,7 @@ public class FoodStoreConsoleApp {
             return;
         }
         //Yemekleri listele
-        System.out.println(String.format("%-5d %-30s %-20s %-15s %-10s %-10s",
+        System.out.println(String.format("%-5s %-30s %-20s %-15s %-10s %-10s",
                 "ID","Ad","Restoran","Kategori","Fiyat","Stok"));
         System.out.println("─".repeat(95));
         for (Food food : foods){
@@ -264,6 +264,63 @@ public class FoodStoreConsoleApp {
             foodDAO.decreaseStock(food.getId(), 1);
         }
         // sipariş özeti
+        System.out.println("\n╔════════════════════════════════════════════════════════════════╗");
+        System.out.println("║              ✅ SİPARİŞ BAŞARIYLA TAMAMLANDI!                 ║");
+        System.out.println("╚════════════════════════════════════════════════════════════════╝");
 
+        System.out.println("\n📋 SİPARİŞ BİLGİLERİ:");
+        System.out.println("───────────────────────────────────────────────────────────────");
+        System.out.println("\uD83D\uDC64 Müşteri Adı    :"+ currentUser.getName());
+
+        //customer bilgilerini göster
+        if (currentCustomer != null){
+            System.out.println("📱 Telefon         :"+ currentCustomer.getPhone());
+            System.out.println("📍 Teslimat Adresi:"+currentCustomer.getAddress());
+        }else {
+            System.out.println("📱 Telefon        : Bilgi yok");
+            System.out.println("📍 Teslimat Adresi: Bilgi yok");
+        }
+        System.out.println("───────────────────────────────────────────────────────────────");
+
+        if (appliedCouponCode != null) {
+            System.out.println("🎟️  Kullanılan Kupon : " + appliedCouponCode);
+            System.out.println("💰 Tasarruf Edilen   : " + String.format("%.2f TL", (originalTotal - discountedTotal)));
+            System.out.println("───────────────────────────────────────────────────────────────");
+        }
+
+        System.out.println("💵 Toplam Ödenen     : " + String.format("%.2f TL", discountedTotal));
+        System.out.println("═══════════════════════════════════════════════════════════════");
+        System.out.println("📦 Yemekleriniz en kısa sürede belirtilen adrese teslim edilecektir.");
+        System.out.println("🙏 Siparişiniz için teşekkür ederiz!");
+
+        // Sepeti temizle
+        selectedFoods.clear();
+    }
+
+    /**
+     * Scanner'dan güvenli int alma
+     */
+    private static int getIntInput() {
+        while (!scanner.hasNextInt()) {
+            System.out.print("❌ Lütfen geçerli bir sayı girin: ");
+            scanner.next();
+        }
+        int value = scanner.nextInt();
+        scanner.nextLine(); // Buffer temizle
+        return value;
+    }
+
+    /**
+     * Veritabanı bağlantısını kapat
+     */
+    private static void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                System.out.println("✅ Veritabanı bağlantısı kapatıldı.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
