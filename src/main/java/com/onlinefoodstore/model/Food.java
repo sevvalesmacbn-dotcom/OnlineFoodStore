@@ -17,9 +17,10 @@ public class Food {
         this.price=price;
         this.stock=stock;
     }
-    public Food(int id,String name,String category,double price , int stock){
+    public Food(int id,String name,String restaurant,String category,double price , int stock){
         this.id=id;
         this.name=name;
+        this.restaurant=restaurant;
         this.category=category;
         this.price=price;
         this.stock=stock;
