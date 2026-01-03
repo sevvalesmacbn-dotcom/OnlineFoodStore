@@ -1,0 +1,58 @@
+@startuml
+class User {
+    -id: int
+    -name: String
+    -username: String
+    -password: int
+    -role: String
+}
+
+class Customer {
+    -phone: String
+    -address: String
+}
+Customer --|> User
+
+class Food {
+    -id: int
+    -name: String
+    -restaurant: String
+    -category: String
+    -price: double
+    -stock: int
+}
+
+class Coupon {
+    -id: int
+    -code: String
+    -discountAmount: double
+}
+
+interface IUserDAO
+interface ICustomerDAO
+interface IFoodDAO
+interface ICouponDAO
+
+class UserDAOImpl
+class CustomerDAOImpl
+class FoodDAOImpl
+class CouponDAOImpl
+
+UserDAOImpl ..|> IUserDAO
+CustomerDAOImpl ..|> ICustomerDAO
+FoodDAOImpl ..|> IFoodDAO
+CouponDAOImpl ..|> ICouponDAO
+
+interface IPaymentMethod
+class CashOnDeliveryPayment
+class CreditCardPayment
+
+CashOnDeliveryPayment ..|> IPaymentMethod
+CreditCardPayment ..|> IPaymentMethod
+
+class FoodStoreConsoleApp
+FoodStoreConsoleApp --> IUserDAO
+FoodStoreConsoleApp --> ICustomerDAO
+FoodStoreConsoleApp --> IFoodDAO
+FoodStoreConsoleApp --> ICouponDAO
+@enduml
