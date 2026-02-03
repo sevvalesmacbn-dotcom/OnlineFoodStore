@@ -208,9 +208,18 @@ public class FoodStoreConsoleApp {
         System.out.println("Toplam Tutar: "+ String.format("%.2f TL",originalTotal));
 
         //Kupon kodu sorgusu
+        // Kupon kodu sorgusu
         System.out.println("\n───────────────────────────────────────");
-        System.out.println("İndirim kuponu kullanmak ister misiniz? (E/H): ");
-        String useCoupon = scanner.nextLine().trim().toUpperCase();
+
+        String useCoupon;
+        do {
+            System.out.print("İndirim kuponu kullanmak ister misiniz? (E/H): ");
+            useCoupon = scanner.nextLine().trim().toUpperCase();
+
+            if (!useCoupon.equals("E") && !useCoupon.equals("H")) {
+                System.out.println("❌ Hatalı giriş! Lütfen sadece E veya H girin.");
+            }
+        } while (!useCoupon.equals("E") && !useCoupon.equals("H"));
 
         double discountedTotal = originalTotal;
         String appliedCouponCode = null;
@@ -227,12 +236,15 @@ public class FoodStoreConsoleApp {
                     discountedTotal = 0;
                 }
                 appliedCouponCode = coupon.getCode();
-                System.out.println("✅ Kupon uygulandı! İndirim: " + String.format("%.2f TL", coupon.getDiscountAmount()));
-                System.out.println("Yeni Toplam: " + String.format("%.2f TL", discountedTotal));
+                System.out.println("✅ Kupon uygulandı! İndirim: "
+                        + String.format("%.2f TL", coupon.getDiscountAmount()));
+                System.out.println("Yeni Toplam: "
+                        + String.format("%.2f TL", discountedTotal));
             } else {
                 System.out.println("❌ Geçersiz kupon kodu!");
             }
         }
+
         // Ödeme yöntemi secimi
         System.out.println("\n───────────────────────────────────────");
         System.out.println("Ödeme Yöntemi Seçiniz:");
